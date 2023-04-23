@@ -10,17 +10,15 @@ import java.io.IOException
 
 class WeatherViewModel(private val repository: WeatherRepository) : ViewModel() {
 
-    fun fetchWeather(param1 : String, param2 : String) = liveData(Dispatchers.IO) {
+    fun fetchWeather(param1 : String, param2 : String, param3 : String, param4 : String) = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
         try {
-            emit(Resource.success(data = repository.fetchWeather(param1,param2),"No Data Found"))
+            emit(Resource.success(data = repository.fetchWeather(param1,param2,param3,param4),"No Data Found"))
         } catch (e: HttpException) {
             emit(Resource.error(data = null, message = e.localizedMessage ?: "An unexpected error occurred"))
         } catch (e : IOException){
             emit(Resource.error(data = null, message = "Couldn't reach server. check your internet connection."))
         }
     }
-
-
 
 }

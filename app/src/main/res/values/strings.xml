@@ -2,4 +2,6 @@
     <string name="app_name">WeatherApp</string>
     <string name="search">Search</string>
     <string name="todo">Todo</string>
+    <string name="us_city_by_search">US City</string>
+    <string name="current_location_from_geocoder">Current Location From Geocoder</string>
 </resources>
