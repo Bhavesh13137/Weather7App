@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import com.weatherapp.R
 import com.weatherapp.data.api_helper.ApiHelper
@@ -63,10 +64,10 @@ class MainActivity : AppCompatActivity() {
                             println("data => $data")
 
                             val str = "Current weather of ".plus(data.name)
-                                .plus("{ ").plus(data.sys.country).plus(" }")
+                                .plus(" { ").plus(data.sys.country).plus(" }")
                                 .plus("\n").plus("Temp : ")
                                 .plus(df.format(data.main.temp-273.15))
-                                .plus(" C")
+                                .plus(" °C")
                                 .plus("\nFeels Like: ")
                                 .plus(df.format(data.main.feels_like-273.15)
                                     .plus(" C"))
@@ -76,6 +77,7 @@ class MainActivity : AppCompatActivity() {
                                 .plus("\nCloudiness: ").plus(data.clouds.all).plus("%")
                                 .plus("\nPressure: ").plus(data.main.pressure).plus("hPa")
                             binding.textWeather.text = str
+                            Glide.with(binding.imageWeather.context).load(Constant.IMAGE_URL.plus(data.weather[0].icon).plus(".png")).into(binding.imageWeather)
                         }
                         if(resource.data == null){
                             showMessage(resource.message!!)
