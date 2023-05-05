@@ -1,7 +1,29 @@
 <resources>
     <string name="app_name">WeatherApp</string>
-    <string name="search">Search</string>
+    <string name="search">Search US city</string>
     <string name="todo">Todo</string>
     <string name="us_city_by_search">US City</string>
     <string name="current_location_from_geocoder">Current Location From Geocoder</string>
+    <string name="current_location">Current Location</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="androdocs">Bhavesh</string>
+    <string name="humidity">Humidity</string>
+    <string name="_06_40_am">06:40 AM</string>
+    <string name="created_by">Created By</string>
+    <string name="_06_40_ams">06:40 AM</string>
+    <string name="pressure">Pressure</string>
+    <string name="_06_40_amss">06:40 AM</string>
+    <string name="wind">Wind</string>
+    <string name="_06_40_amq">06:40 AM</string>
+    <string name="sunset">Sunset</string>
+    <string name="_06_40_amw">06:40 AM</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="nashik_ind">NASHIK, IND</string>
+    <string name="_20_april_2012_20_08_pm">20 April 2012, 20:08 PM</string>
+    <string name="clear_sky">Clear Sky</string>
+    <string name="_29_c">29°C</string>
+    <string name="min_temp_05_05_am">Min Temp: 05:05 AM</string>
+    <string name="max_temp_05_05_pm">Max Temp: 05:05 PM</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>

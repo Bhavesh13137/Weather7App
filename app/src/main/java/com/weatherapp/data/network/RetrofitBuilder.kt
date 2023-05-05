@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 object RetrofitBuilder {
 
@@ -15,10 +16,11 @@ object RetrofitBuilder {
         }.build()
 
         return Retrofit.Builder()
+            .baseUrl(Constant.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(client)
-            .baseUrl("https://api.openweathermap.org/data/2.5/").build()
-
+            .build()
     }
 
     val apiService : ApiService = getRetrofit().create(ApiService::class.java)

@@ -21,13 +21,13 @@
     <color name="edit_text_color">#455A64</color>
     <color name="orange">#FFA500</color>
     <color name="green">#00FF00</color>
-
+    <color name="fontColor">#FF404A3A</color>
 
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorBackground">#ffffff</color>
-
+    <color name="secondary">#E2F2DA</color>
 
     <color name="bicBackground">#FFFFFF</color>
     <color name="bicButtonText">#FFFFFF</color>
