@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -46,16 +47,17 @@ class WeatherDayFragment : Fragment() , WeatherAdapter.OnClickListener, CurrentW
     private lateinit var viewModel: WeatherViewModel
     private var fusedLocationProvider: FusedLocationProviderClient? = null
     private lateinit var progressBar : ProgressBar
+    private lateinit var weatherCity : TextView
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_weather_day, container, false)
     }
 
-    fun showNewProgress() {
+    private fun showNewProgress() {
         progressBar.isIndeterminate = true
         progressBar.visibility = View.VISIBLE
     }
 
-    fun hideNewProgress() {
+    private fun hideNewProgress() {
         progressBar.isIndeterminate = false
         progressBar.visibility = View.GONE
     }
@@ -65,6 +67,7 @@ class WeatherDayFragment : Fragment() , WeatherAdapter.OnClickListener, CurrentW
 
         (activity as AppCompatActivity).supportActionBar?.title = "Weather Forecast"
         progressBar = view.findViewById<ProgressBar>(R.id.progressBar)
+        weatherCity = view.findViewById<TextView>(R.id.weatherCity)
         val recView = view.findViewById<RecyclerView>(R.id.recView)
         recView.layoutManager = LinearLayoutManager(context)
         recView.adapter = adapter
@@ -178,7 +181,8 @@ class WeatherDayFragment : Fragment() , WeatherAdapter.OnClickListener, CurrentW
         showNewProgress()
         viewModel.list.observe(viewLifecycleOwner){
             hideNewProgress()
-
+            weatherCity.text = it.city?.name
+            //adapter.setList(it.list!!)
 
             val firstDate = it.list?.get(0)?.dt_txt?.slice(8..9)
             var otherDates = firstDate
@@ -193,10 +197,10 @@ class WeatherDayFragment : Fragment() , WeatherAdapter.OnClickListener, CurrentW
             adapterCurrentWeather.setList(data2)
 
 
-            var data3 = mutableListOf<Lists>()
+            val data3 = mutableListOf<Lists>()
             for (a in i - 1..39) {
                 if (it.list?.get(a)?.dt_txt?.slice(11..12) == "12") {
-                    it.list[a].dt_txt?.let { it1 -> Log.d("Something date", it1) }
+                    it.list?.get(a)?.dt_txt?.let { it1 -> Log.d("Something date", it1) }
                     data3.add(it.list[a])
                 }
             }

@@ -2,7 +2,6 @@ package com.weatherapp.ui.view
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.ImageView
@@ -16,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.weatherapp.R
 import com.weatherapp.data.model.Lists
 import com.weatherapp.data.network.Constant
+import java.text.SimpleDateFormat
 import java.util.*
 
 private const val ARG_PARAM1 = "param1"
@@ -49,17 +49,24 @@ class WeatherDetailsFragment : Fragment() {
         val cMaxTemp = view.findViewById<TextView>(R.id.maxTemp)
         val cHumidity = view.findViewById<TextView>(R.id.humidity)
         val cTodayTitle = view.findViewById<TextView>(R.id.todayTitle)
-        cTemp.text = (param1?.main?.temp?.minus(273.15))?.toInt().toString() + "\u2103"
+        cTemp.text = param1?.main?.temp?.minus(273.15)?.toInt().toString() + "\u2103"
         cWeDesc.text = param1?.weather?.get(0)?.description.toString()
             .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
-        cTodayTitle.text = "Today, " + param1?.dt_txt.toString().slice(10..15)
+
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        val outputFormat = SimpleDateFormat("dd-MM-yyyy hh:mm:ss")
+
+        val date: Date? = param1?.dt_txt?.let { inputFormat.parse(it) }
+        val outputDate = date?.let { outputFormat.format(it) }
+
+        cTodayTitle.text = outputDate//param1?.dt_txt.toString()//.slice(10..15)
 
         val ss = param1?.main?.temp_min
-        cMinTemp.text = (ss?.minus(273.1))?.toInt().toString()+ "\u2103"
-        cMaxTemp.text = ((param1?.main?.temp_max?.toDouble())?.minus(273.1))?.toInt().toString() + "\u2103"
+        cMinTemp.text = ss?.minus(273.1)?.toInt().toString()+ "\u2103"
+        cMaxTemp.text = param1?.main?.temp_max?.minus(273.1)?.toInt().toString() + "\u2103"
         cHumidity.text = param1?.main?.humidity.toString() + "%"
-        val iconcode = param1?.weather?.get(0)?.icon.toString()
-        val iconUrl = Constant.IMAGE_URL.plus(iconcode).plus(".png") //"https://openweathermap.org/img/w/" + iconcode + ".png";
+        val iconCode = param1?.weather?.get(0)?.icon.toString()
+        val iconUrl = Constant.IMAGE_URL.plus(iconCode).plus(".png")
 
         Glide.with(cWeLogo.context)
             .load(iconUrl)

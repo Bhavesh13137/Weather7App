@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.weatherapp.R
@@ -31,6 +32,7 @@ class WeatherAdapter(private val onClickListener: OnClickListener) : RecyclerVie
         var wedesc = view.findViewById<TextView>(R.id.weatherDescription)
         var wemain = view.findViewById<TextView>(R.id.weatherTemperature)
         var welogo = view.findViewById<ImageView>(R.id.weatherIcon)
+        var constraint = view.findViewById<ConstraintLayout>(R.id.constraint)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -42,10 +44,10 @@ class WeatherAdapter(private val onClickListener: OnClickListener) : RecyclerVie
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val weathernew = itemViewModels[position]
         val inputFormat = SimpleDateFormat("yyyy-MM-dd")
-        val outputFormat = SimpleDateFormat("dd/MM/yyyy")
+        val outputFormat = SimpleDateFormat("dd-MM-yyyy")
 
-        val date: Date = inputFormat.parse(weathernew.dt_txt?.slice(0..9))
-        val outputDate = outputFormat.format(date)
+        val date: Date? = weathernew.dt_txt?.let { inputFormat.parse(it) }
+        val outputDate = date?.let { outputFormat.format(it) }
 
         Log.d("New Date", outputDate.toString())
 
@@ -53,7 +55,11 @@ class WeatherAdapter(private val onClickListener: OnClickListener) : RecyclerVie
         val we2 = weathernew.main
         holder.wedate.text = outputDate
         if (we != null) {
-            holder.wedesc.text = we.description?.capitalize()
+            holder.wedesc.text = we.description?.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(
+                    Locale.ROOT
+                ) else it.toString()
+            }
         }
         if (we2 != null) {
             Log.d("weatherTemp", we2.temp.toString())
@@ -72,7 +78,7 @@ class WeatherAdapter(private val onClickListener: OnClickListener) : RecyclerVie
             .into(holder.welogo)
 
 
-        holder.wedate.setOnClickListener {
+        holder.constraint.setOnClickListener {
             onClickListener.onViewDetails(position,itemViewModels[position])
         }
     }

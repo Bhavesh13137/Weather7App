@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.weatherapp.R
 import com.weatherapp.data.model.Lists
+import com.weatherapp.data.network.Constant
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CurrentWeatherAdapter(private val onClickListener: OnClickListener): RecyclerView.Adapter<CurrentWeatherAdapter.CurrentWeatherViewHolder>() {
 
@@ -46,32 +49,31 @@ class CurrentWeatherAdapter(private val onClickListener: OnClickListener): Recyc
 
     override fun onBindViewHolder(holder: CurrentWeatherViewHolder, position: Int) {
         val weathernew = weatherrootdatas[position]
-        holder.Ctemp.text = (weathernew.main?.temp?.minus(273.15))?.toInt().toString() + "\u2103"
-        holder.Cwedesc.text = weathernew.weather?.get(0)?.description.toString().capitalize()
+        holder.Ctemp.text = weathernew.main?.temp?.minus(273.15)?.toInt().toString() + "\u2103"
+        holder.Cwedesc.text = weathernew.weather?.get(0)?.description.toString()
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
 
-        holder.CtodayTitle.text = "Today, " + weathernew.dt_txt.toString().slice(10..15)
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
+        val outputFormat = SimpleDateFormat("dd-MM-yyyy hh:mm:ss")
 
 
-        Log.d("Something", weathernew.dt_txt.toString().slice(10..-1))
 
-//        var tempMin = ""
-//        for(a in weathernew.main.temp_min){
-//        }
-        var ss = weathernew.main?.temp_min
-        holder.CminTemp.text = (weathernew.main?.temp_min?.toDouble()?.minus(273.1))?.toInt().toString()+ "\u2103"
-//        holder.continer.animation = AnimationUtils.loadAnimation(context, R.anim.fade_scale)
+        val date: Date? = weathernew.dt_txt?.let { inputFormat.parse(it) }
+        val outputDate = date?.let { outputFormat.format(it) }
 
-//        holder.itemView.setOnFocusChangeListener { view, b ->
-//
-//        }
+        holder.CtodayTitle.text = outputDate.toString()
 
-        holder.CmaxTemp.text = ((weathernew.main?.temp_max?.toDouble())?.minus(273.1))?.toInt().toString() + "\u2103"
+        val ss = weathernew.main?.temp_min
+        holder.CminTemp.text = ss?.minus(273.1)?.toInt().toString()+ "\u2103"
+
+
+        holder.CmaxTemp.text = weathernew.main?.temp_max?.minus(273.1)?.toInt().toString() + "\u2103"
         holder.Chumidity.text = weathernew.main?.humidity.toString() + "%"
-        val iconcode = weathernew.weather?.get(0)?.icon.toString()
-        val iconurl = "https://openweathermap.org/img/w/" + iconcode + ".png";
+        val iconCode = weathernew.weather?.get(0)?.icon.toString()
+        val iconUrl = Constant.IMAGE_URL.plus(iconCode).plus(".png")
 
-        Glide.with(holder.itemView.context)
-            .load(iconurl)
+        Glide.with(holder.Cwelogo.context)
+            .load(iconUrl)
             .into(holder.Cwelogo)
     }
 
