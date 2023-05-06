@@ -51,7 +51,7 @@
 
         <ImageView
             android:id="@+id/weatherIcon"
-            android:layout_width="75dp"
+            android:layout_width="60dp"
             android:layout_height="match_parent"
             android:src="@drawable/ic_launcher_foreground"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:text="26* C"
             android:textColor="@color/colorPrimary"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guide3_weather"
@@ -80,7 +80,7 @@
             android:text="Cloudy Sky"
             android:layout_marginHorizontal="3dp"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="16sp"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

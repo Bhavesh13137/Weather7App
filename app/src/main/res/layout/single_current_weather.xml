@@ -8,9 +8,10 @@
     android:layout_gravity="center">
 
     <androidx.cardview.widget.CardView
+        android:layout_margin="20dp"
         android:id="@+id/cardView"
         android:layout_width="250dp"
-        android:layout_height="265dp"
+        android:layout_height="wrap_content"
         android:outlineSpotShadowColor="@color/fontColor"
         app:cardCornerRadius="10dp"
         app:cardElevation="20dp"
@@ -65,7 +66,6 @@
                 android:text="Cloudy Sky"
                 android:textColor="@color/fontColor"
                 android:textSize="20sp"
-
                 app:layout_constraintBottom_toTopOf="@id/icon2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

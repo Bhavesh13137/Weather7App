@@ -13,22 +13,19 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.weatherapp.R
-import com.weatherapp.data.model.Lists
-import com.weatherapp.data.network.Constant
-import java.text.SimpleDateFormat
-import java.util.*
+import com.weatherapp.data.waether_model.Forecastday
 
 private const val ARG_PARAM1 = "param1"
 
 class WeatherDetailsFragment : Fragment() {
 
-    private var param1: Lists? = null
+    private var param1: Forecastday? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         param1 = arguments?.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                it.getParcelable(ARG_PARAM1,Lists::class.java)
+                it.getParcelable(ARG_PARAM1, Forecastday::class.java)
             }else{
                 it.getParcelable(ARG_PARAM1)
             }
@@ -49,7 +46,29 @@ class WeatherDetailsFragment : Fragment() {
         val cMaxTemp = view.findViewById<TextView>(R.id.maxTemp)
         val cHumidity = view.findViewById<TextView>(R.id.humidity)
         val cTodayTitle = view.findViewById<TextView>(R.id.todayTitle)
-        cTemp.text = param1?.main?.temp?.minus(273.15)?.toInt().toString() + "\u2103"
+
+        cTemp.text = param1?.day?.avgtemp_c.toString().plus(" ").plus("\u2103")
+        cWeDesc.text = param1?.day?.condition?.text
+        cTodayTitle.text = param1?.date
+        cHumidity.text = param1?.day?.avghumidity.toString().plus("%")
+
+        val iconUrl = "https:".plus(param1?.day?.condition?.icon)
+        Glide.with(cWeLogo.context)
+            .load(iconUrl)
+            .into(cWeLogo)
+
+        val mint = param1?.day?.mintemp_c.toString().plus(" ").plus("\u2103")
+        cMinTemp.text = mint
+
+        val maxT = param1?.day?.maxtemp_c.toString().plus(" ").plus("\u2103")
+        cMaxTemp.text = maxT
+
+
+
+        //cMinTemp.visibility = View.GONE
+        //cMaxTemp.visibility = View.GONE
+
+        /*cTemp.text = param1?.main?.temp?.minus(273.15)?.toInt().toString() + "\u2103"
         cWeDesc.text = param1?.weather?.get(0)?.description.toString()
             .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
 
@@ -70,7 +89,7 @@ class WeatherDetailsFragment : Fragment() {
 
         Glide.with(cWeLogo.context)
             .load(iconUrl)
-            .into(cWeLogo)
+            .into(cWeLogo)*/
     }
 
 

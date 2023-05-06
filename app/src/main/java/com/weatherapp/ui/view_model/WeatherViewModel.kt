@@ -3,7 +3,7 @@ package com.weatherapp.ui.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.weatherapp.data.model.WeatherResponse
+import com.weatherapp.data.waether_model.WeatherResponse
 import com.weatherapp.repository.WeatherRepository
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,8 +16,8 @@ class WeatherViewModel(private val repository: WeatherRepository) : ViewModel() 
     val list : LiveData<WeatherResponse>
     get() = _list
 
-    fun fetchWeather(param1: String, param2: String, param3: String, param4: String) {
-            repository.fetchWeather(param1, param2, param3, param4)
+    fun fetchWeather(param1: String, param2: String, param3: String, param4: String, param5: String) {
+            repository.fetchWeather(param1, param2, param3, param4,param5)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<WeatherResponse> {

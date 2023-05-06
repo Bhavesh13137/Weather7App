@@ -11,17 +11,15 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.weatherapp.R
-import com.weatherapp.data.model.Lists
-import com.weatherapp.data.network.Constant
-import java.text.SimpleDateFormat
+import com.weatherapp.data.waether_model.Forecastday
 import java.util.*
 
 class WeatherAdapter(private val onClickListener: OnClickListener) : RecyclerView.Adapter<WeatherAdapter.ViewHolder>() {
 
-    private var itemViewModels = mutableListOf<Lists>()
+    private var itemViewModels = mutableListOf<Forecastday>()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setList(list : List<Lists>){
+    fun setList(list : List<Forecastday>){
         this.itemViewModels.clear()
         this.itemViewModels.addAll(list)
         notifyDataSetChanged()
@@ -42,7 +40,21 @@ class WeatherAdapter(private val onClickListener: OnClickListener) : RecyclerVie
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val weathernew = itemViewModels[position]
+        val weatherName = itemViewModels[position]
+
+        holder.wedate.text = weatherName.date
+
+        val iconUrl = "https:".plus(weatherName.day?.condition?.icon)
+        Glide.with(holder.welogo.context)
+            .load(iconUrl)
+            .into(holder.welogo)
+
+        holder.wedesc.text = weatherName.day?.condition?.text
+
+        holder.wemain.text = weatherName.day?.avgtemp_c.toString().plus(" ").plus("\u2103")
+
+        /*val weathernew = itemViewModels[position]
+
         val inputFormat = SimpleDateFormat("yyyy-MM-dd")
         val outputFormat = SimpleDateFormat("dd-MM-yyyy")
 
@@ -75,7 +87,7 @@ class WeatherAdapter(private val onClickListener: OnClickListener) : RecyclerVie
 
         Glide.with(holder.welogo.context)
             .load(iconurl)
-            .into(holder.welogo)
+            .into(holder.welogo)*/
 
 
         holder.constraint.setOnClickListener {
@@ -92,6 +104,6 @@ class WeatherAdapter(private val onClickListener: OnClickListener) : RecyclerVie
     }
 
     interface OnClickListener {
-        fun onViewDetails(i: Int, model: Lists)
+        fun onViewDetails(i: Int, model: Forecastday)
     }
 }

@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,9 +30,10 @@ import com.weatherapp.R
 import com.weatherapp.adapter.CurrentWeatherAdapter
 import com.weatherapp.adapter.WeatherAdapter
 import com.weatherapp.data.api_helper.ApiHelper
-import com.weatherapp.data.model.Lists
 import com.weatherapp.data.network.Constant
 import com.weatherapp.data.network.RetrofitBuilder
+import com.weatherapp.data.waether_model.Forecastday
+import com.weatherapp.data.waether_model.Hour
 import com.weatherapp.repository.WeatherRepository
 import com.weatherapp.ui.factory.WeatherViewModelFactory
 import com.weatherapp.ui.view_model.WeatherViewModel
@@ -161,8 +161,8 @@ class WeatherDayFragment : Fragment() , WeatherAdapter.OnClickListener, CurrentW
         val geocoder = Geocoder(requireContext())
         var address: String
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { geocoder.getFromLocation(location.latitude, location.longitude, 1) { addresses ->
-                address = addresses[0].locality
-                println()
+                address = addresses[0].locality.plus(",").plus(addresses[0].countryName)
+                println("address -> $address")
                 CoroutineScope(Dispatchers.Main).launch {
                     fetchCurrentWeather(address,location.latitude.toString(),location.longitude.toString())
                 }
@@ -179,12 +179,18 @@ class WeatherDayFragment : Fragment() , WeatherAdapter.OnClickListener, CurrentW
 
     private fun fetchCurrentWeather(param1 : String,param2 : String,param3 : String) {
         showNewProgress()
-        viewModel.list.observe(viewLifecycleOwner){
+        viewModel.list.observe(viewLifecycleOwner){ it ->
             hideNewProgress()
-            weatherCity.text = it.city?.name
-            //adapter.setList(it.list!!)
+            weatherCity.text = it.location?.name
 
-            val firstDate = it.list?.get(0)?.dt_txt?.slice(8..9)
+
+            it.forecast?.forecastday?.get(0)?.hour.let { hour ->
+                adapterCurrentWeather.setList(hour!!)
+            }
+
+            it.forecast?.forecastday?.let { it1 -> adapter.setList(it1) }
+
+            /*val firstDate = it.list?.get(0)?.dt_txt?.slice(8..9)
             var otherDates = firstDate
             var i = 1
             val data2 = mutableListOf<Lists>()
@@ -205,9 +211,10 @@ class WeatherDayFragment : Fragment() , WeatherAdapter.OnClickListener, CurrentW
                 }
             }
 
-            adapter.setList(data3)
+            adapter.setList(data3)*/
         }
-        viewModel.fetchWeather(param1,param2,param3,Constant.API_KEY)
+        //viewModel.fetchWeather(param1,param2,param3,Constant.API_KEY)
+        viewModel.fetchWeather(Constant.API_KEY,param1,"7","no","no")
     }
 
     override fun onPause() {
@@ -300,13 +307,13 @@ class WeatherDayFragment : Fragment() , WeatherAdapter.OnClickListener, CurrentW
         }
     }
 
-    override fun onViewDetails(i: Int, model: Lists) {
+    override fun onViewDetails(i: Int, model: Forecastday) {
         val bundle = Bundle()
         bundle.putParcelable("param1",model)
         findNavController().navigate(R.id.action_weatherDayFragment_to_weatherDetailsFragment,bundle)
     }
 
-    override fun onViewDetail(i: Int, model: Lists) {
+    override fun onViewDetail(i: Int, model: Hour) {
 
     }
 }
